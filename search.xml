@@ -104,19 +104,6 @@
     
     
     <entry>
-      <title></title>
-      <link href="/2022/02/05/ru-he-cong-wind-ke-hu-duan-huo-qu-jin-rong-shu-ju/"/>
-      <url>/2022/02/05/ru-he-cong-wind-ke-hu-duan-huo-qu-jin-rong-shu-ju/</url>
-      
-        <content type="html"><![CDATA[<h2 id="从WIND客户端获取金融数据的几种方式"><a href="#从WIND客户端获取金融数据的几种方式" class="headerlink" title="从WIND客户端获取金融数据的几种方式"></a>从WIND客户端获取金融数据的几种方式</h2><p>WIND 资讯金融终端是一个在线实时金融信息终端，为用户提供无缝集成的行情报价、金融数据、财经信息、分析工具、组合管理等功能的综合性金融服务平台，本文旨在简单介绍如何从WIND金融终端获取数据。</p><p>登入客户端后，我们会首先跳转到首页。</p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212224212913.png" alt="image-20220212224212913"></p><p>如果我们的数据是面板数据，那么我们一般是可以直接在页面上导出的。</p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212224310866.png" alt="image-20220212224310866"></p><p>但如果想要打造自动化数据流的话，我们往往需要借助客户端的数据接口，最常用的是Excel插件和代码生成器。</p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212224606998.png" alt="image-20220212224606998"></p><p>点击Excel插件，会在Excel软件上自动安装WIND插件。当我们打开一份XlSX文件后，会看到下面的菜单栏，在这个插件下我们可以轻松地使用WIND自带的EXCEL函数对数据进行处理。</p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212224650195.png" alt="image-20220212224650195"></p><p>点击代码生成器，则会弹出下面的界面。它通过一系列点击来自动生成对应的WIND代码，供数据工程师调用。</p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212230902111.png" alt="image-20220212230902111"></p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212230928124.png" alt="image-20220212230928124"></p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212230950437.png" alt="image-20220212230950437"></p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212231012059.png" alt="image-20220212231012059"></p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212231028067.png" alt="image-20220212231028067"></p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212231053922.png" alt="image-20220212231053922"></p><p>除了上述两种比较简单的场景外，还有一种稍微棘手的情况——数据开始是使用Excel接口处理的，现在想将它“翻译”成代码的处理逻辑。对于这种情况，我们必须先确定Excel接口处理过程中被调用EXCEL函数的参数和功能，这样才可以去尝试使用代码生成器来得到对应的数据并编写正确的处理逻辑。</p><p>比如下面我们想得到付息日的信息，通过Excel接口看到它是调用了一个名为paymentdate函数，其中需要设置参数有两个。</p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212231744413.png" alt="image-20220212231744413"></p><p>通过下面的操作，可以辅助上述问题的解决。</p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212231819452.png" alt="image-20220212231819452"><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212231858884.png" alt="image-20220212231858884"></p><p>打开函数搜索弹框，我们可以找到该函数的说明，知道了第一个参数的变量名为windcode，然后我们打开代码生成器在指标选择界面中添加该字段。</p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212232055301.png" alt="image-20220212232055301"></p><p>最终得到该函数所需要的参数数据。</p><p><img src="C:%5CUsers%5CMr.Zeng%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20220212232113953.png" alt="image-20220212232113953"></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>2021年终总结</title>
       <link href="/2021/12/26/2021-nian-zhong-zong-jie/"/>
       <url>/2021/12/26/2021-nian-zhong-zong-jie/</url>
