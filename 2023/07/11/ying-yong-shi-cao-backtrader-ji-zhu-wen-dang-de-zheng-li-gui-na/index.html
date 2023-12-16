@@ -1,0 +1,3090 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="应用实操｜回测框架 backtrader 表层接口的整理归纳, ECNU xingming machine-learning data-science feature-selection">
+    <meta name="baidu-site-verification" content="code-QUQTjeai5V">
+    <meta name="google-site-verification" content="code-QUQTjeai5V">
+    <meta name="360-site-verification" content="code-QUQTjeai5V">
+    <meta name="description" content="应用实操｜回测框架 backtrader 表层接口的整理归纳相比于著名但已停止维护的 zipline，backtrader 是当下较为流行的策略回测框架，国内仍有众多大佬在分享它的使用笔记，对于新人和开发者而言，这显然会更加容易上手。
+然而">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>应用实操｜回测框架 backtrader 表层接口的整理归纳 | 兴明的博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?ce84511d3df71640a9378a69f6293044";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+    
+        <script>
+            (function(){
+                var bp = document.createElement('script');
+                var curProtocol = window.location.protocol.split(':')[0];
+                if (curProtocol === 'https') {
+                    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+                }
+                else {
+                    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+                }
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(bp, s);
+            })();
+        </script>
+    
+
+    <script>
+        (function(){
+        var src = "https://jspassport.ssl.qhimg.com/11.0.1.js?d182b3f28525f2db83acfaaf6e696dba";
+        document.write('<script src="' + src + '" id="sozz"><\/script>');
+        })();
+    </script>
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+
+<body>
+
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    
+                    <span class="logo-span">兴明的博客</span>
+                </a>
+                
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/friends" class="waves-effect waves-light">
+            
+            <i class="fa fa-address-book"></i>
+            
+            <span>友情链接</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/contact" class="waves-effect waves-light">
+            
+            <i class="fa fa-comments"></i>
+            
+            <span>留言板</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+    		<!--
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        -->
+        <div class="logo-name">兴明的博客</div>
+        <div class="logo-desc">
+            
+            华东师范大学 | 计算机科学与技术 | 机器学习
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        <li>
+            <a href="/friends" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-address-book"></i>
+                
+                友情链接
+            </a>
+        </li>
+        
+        <li>
+            <a href="/contact" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-comments"></i>
+                
+                留言板
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/superman0010" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/superman0010" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        应用实操｜回测框架 backtrader 表层接口的整理归纳
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                        <a href="/tags/金融/" target="_blank">
+                            <span class="chip bg-color">金融</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                        <a href="/categories/量化交易/" class="post-category" target="_blank">
+                            量化交易
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2023-07-11
+                </div>
+
+                <div class="post-author info-break-policy">
+                    <i class="fa fa-user-o fa-fw"></i>作者:&nbsp;&nbsp;
+                    
+                    兴明
+                    
+                </div>
+
+                
+                
+                <div class="info-break-policy">
+                    <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    9.5k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    46 分
+                </div>
+                
+                
+
+                
+                <div id="busuanzi_container_page_pv" class="info-break-policy">
+                    <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                    <span id="busuanzi_value_page_pv"></span>
+                </div>
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="应用实操｜回测框架-backtrader-表层接口的整理归纳"><a href="#应用实操｜回测框架-backtrader-表层接口的整理归纳" class="headerlink" title="应用实操｜回测框架 backtrader 表层接口的整理归纳"></a>应用实操｜回测框架 backtrader 表层接口的整理归纳</h2><p>相比于著名但已停止维护的 zipline，backtrader 是当下较为流行的策略回测框架，国内仍有众多大佬在分享它的使用笔记，对于新人和开发者而言，这显然会更加容易上手。</p>
+<p>然而，由于 backtrader 的源码设计采用元编程技术，大量使用继承的概念，使得汇总参数以及方法，不仅需要考虑所有的父类，同时也容易被诸多继承关系所困扰。同时 backtrader 的技术文档虽然足够详细，但仍缺乏一定的条理性。</p>
+<p>考虑到上述的问题，我在这里尝试将源码和技术文档的内容汇总在一起，在提供功能模块的参数集合以及方法接口的同时，加入技术文档的使用说明。</p>
+<p>文章陈列的方法均来自于 backtrader 源码，同时经历过有序排序，使得相似名称的函数汇聚一起，方便阅读。同时，这里并没有对参数和方法进行详细的阐述，因为最好的材料是技术文档本身。</p>
+<p>这篇文章面向对 backtrader 具有一定基础的使用者，如果以前没有接触过，可以先看我的入门文章《xxxx》</p>
+<table>
+<thead>
+<tr>
+<th>一级目录</th>
+<th>二级目录</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 Cerebro 大脑</td>
+<td>源码分析</td>
+</tr>
+<tr>
+<td></td>
+<td>Cerebro 初始化</td>
+</tr>
+<tr>
+<td></td>
+<td>添加模块</td>
+</tr>
+<tr>
+<td></td>
+<td>执行逻辑</td>
+</tr>
+<tr>
+<td></td>
+<td>异常处理和日志记录</td>
+</tr>
+<tr>
+<td>2 Data Feed 数据源</td>
+<td>源码分析</td>
+</tr>
+<tr>
+<td></td>
+<td>重采样和重放</td>
+</tr>
+<tr>
+<td></td>
+<td>多个周期的数据添加</td>
+</tr>
+<tr>
+<td></td>
+<td>期货数据的滚动</td>
+</tr>
+<tr>
+<td></td>
+<td>数据过滤器</td>
+</tr>
+<tr>
+<td>3 Strategy 策略</td>
+<td>源码分析</td>
+</tr>
+<tr>
+<td></td>
+<td>信号的使用</td>
+</tr>
+<tr>
+<td>4 Indicators 指标</td>
+<td>源码分析</td>
+</tr>
+<tr>
+<td></td>
+<td>init 方法和 next 方法的比较</td>
+</tr>
+<tr>
+<td></td>
+<td>指标绘图的设置</td>
+</tr>
+<tr>
+<td></td>
+<td>最小周期和混合周期</td>
+</tr>
+<tr>
+<td>5 Orders 订单</td>
+<td>源码分析</td>
+</tr>
+<tr>
+<td></td>
+<td>创建、取消和信息通知</td>
+</tr>
+<tr>
+<td></td>
+<td>目标订单</td>
+</tr>
+<tr>
+<td></td>
+<td>OCO 排他性订单</td>
+</tr>
+<tr>
+<td></td>
+<td>Bracket 组合订单</td>
+</tr>
+<tr>
+<td></td>
+<td>期货和现货之间的补偿</td>
+</tr>
+<tr>
+<td>6 Broker 经纪人</td>
+<td>源码分析</td>
+</tr>
+<tr>
+<td></td>
+<td>滑点的设置</td>
+</tr>
+<tr>
+<td></td>
+<td>Cheat On Open 开盘作弊</td>
+</tr>
+<tr>
+<td></td>
+<td>Filter 填充器</td>
+</tr>
+<tr>
+<td></td>
+<td>Position 持仓</td>
+</tr>
+<tr>
+<td></td>
+<td>Trade 交易</td>
+</tr>
+<tr>
+<td>7 Commissions Schemes 佣金方案</td>
+<td>源码分析</td>
+</tr>
+<tr>
+<td></td>
+<td>佣金的设置</td>
+</tr>
+<tr>
+<td>8 Analyzers 分析器</td>
+<td>源码分析</td>
+</tr>
+<tr>
+<td></td>
+<td>基本操作</td>
+</tr>
+<tr>
+<td></td>
+<td>PyFolio 的结合</td>
+</tr>
+<tr>
+<td>9 Observers 观察者</td>
+<td>源码分析</td>
+</tr>
+<tr>
+<td></td>
+<td>保存统计信息</td>
+</tr>
+<tr>
+<td>10 Sizers 仓位管理器</td>
+<td>源码分析</td>
+</tr>
+<tr>
+<td></td>
+<td>cerebro 和 strategy 中的设置</td>
+</tr>
+<tr>
+<td>11 Live Trading 实盘交易</td>
+<td>源码分析</td>
+</tr>
+<tr>
+<td></td>
+<td>存储模型与直接模型</td>
+</tr>
+</tbody></table>
+<h3 id="1-Cerebro-大脑"><a href="#1-Cerebro-大脑" class="headerlink" title="1 Cerebro 大脑"></a>1 Cerebro 大脑</h3><h4 id="1-1-源码分析"><a href="#1-1-源码分析" class="headerlink" title="1.1 源码分析"></a>1.1 源码分析</h4><pre><code># backtrader/cerebro.py 文件中的 Cerebro 类
+
+# 用户设置的参数，可以在自带的 run 函数里设置这些参数
+# 除此之外，也可以在 __init__ 函数中设置（隐式调用 __new__ 函数完成赋值）
+params = (
+    (&#39;preload&#39;, True),
+    (&#39;runonce&#39;, True),
+    (&#39;maxcpus&#39;, None),
+    (&#39;stdstats&#39;, True),
+    (&#39;oldbuysell&#39;, False),
+    (&#39;oldtrades&#39;, False),
+    (&#39;lookahead&#39;, 0),
+    (&#39;exactbars&#39;, False),
+    (&#39;optdatas&#39;, True),
+    (&#39;optreturn&#39;, True),
+    (&#39;objcache&#39;, False),
+    (&#39;live&#39;, False),
+    (&#39;writer&#39;, False),
+    (&#39;tradehistory&#39;, False),
+    (&#39;oldsync&#39;, False),
+    (&#39;tz&#39;, None),
+    (&#39;cheat_on_open&#39;, False),
+    (&#39;broker_coo&#39;, True),
+    (&#39;quicknotify&#39;, False),
+)
+
+# 初始化函数，可以看到它的类变量集合，采用列表进行存储功能模块，因此具备多重设置的能力
+# 默认设置 self._broker = BackBroker 作为经纪人
+def __init__(self):
+    self._dolive = False
+    self._doreplay = False
+    self._dooptimize = False
+    self.stores = list()
+    self.feeds = list()
+    self.datas = list()
+    self.datasbyname = collections.OrderedDict()
+    self.strats = list()
+    self.optcbs = list()    
+    self.observers = list()
+    self.analyzers = list()
+    self.indicators = list()
+    self.sizers = dict()
+    self.writers = list()
+    self.storecbs = list()
+    self.datacbs = list()
+    self.signals = list()
+    self._signal_strat = (None, None, None)
+    self._signal_concurrent = False
+    self._signal_accumulate = False
+
+    self._dataid = itertools.count(1)
+
+    self._broker = BackBroker()
+    self._broker.cerebro = self
+
+    self._tradingcal = None
+
+    self._pretimers = list()
+    self._ohistory = list()
+    self._fhistory = None
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+# 在其余的方法中，我们可以看到很多熟悉的常用函数，比如，用于启动的 run 方法、添加模块的 add_xxx 方法、通知信息的 notify_xxx 方法等等
+def __call__(self, iterstrat):
+def __getstate__(self):
+def __init__(self):
+def _add_timer(self, owner, when, offset=datetime.timedelta(), repeat=datetime.timedelta(), weekdays=[], weekcarry=False, monthdays=[], monthcarry=True, allow=None, tzdata=None, strats=False, cheat=False, *args, **kwargs)
+def _brokernotify(self):
+def _check_timers(self, runstrats, dt0, cheat=False):
+def _datanotify(self):
+def _disable_runonce(self):
+def _init_stcount(self):
+def _next_stid(self):
+def _next_writers(self, runstrats):
+def _notify_data(self, data, status, *args, **kwargs):
+def _notify_store(self, msg, *args, **kwargs):
+def _runnext_old(self, runstrats):
+def _runnext(self, runstrats):
+def _runonce_old(self, runstrats):
+def _runonce(self, runstrats):
+def _storenotify(self):
+def add_order_history(self, orders, notify=True):
+def add_signal(self, sigtype, sigcls, *sigargs, **sigkwargs):
+def add_timer(self, when, offset=datetime.timedelta(), repeat=datetime.timedelta(), weekdays=[], weekcarry=False, monthdays=[], monthcarry=True, allow=None, tzdata=None, strats=False, cheat=False, *args, **kwargs)
+def addanalyzer(self, ancls, *args, **kwargs):
+def addcalendar(self, cal):
+def adddata(self, data, name=None):
+def adddatacb(self, callback):
+def addindicator(self, indcls, *args, **kwargs):
+def addobserver(self, obscls, *args, **kwargs):
+def addobservermulti(self, obscls, *args, **kwargs):
+def addsizer_byidx(self, idx, sizercls, *args, **kwargs):
+def addsizer(self, sizercls, *args, **kwargs):
+def addstore(self, store):
+def addstorecb(self, callback):
+def addstrategy(self, strategy, *args, **kwargs):
+def addtz(self, tz):
+def addwriter(self, wrtcls, *args, **kwargs):
+def chaindata(self, *args, **kwargs):
+def getbroker(self):
+def iterize(iterable):
+def notify_data(self, data, status, *args, **kwargs):
+def notify_store(self, msg, *args, **kwargs):
+def notify_timer(self, timer, when, *args, **kwargs):
+def optcallback(self, cb):
+def optstrategy(self, strategy, *args, **kwargs):
+def plot(self, plotter=None, numfigs=1, iplot=True, start=None, end=None, width=16, height=9, dpi=300, tight=True, use=None, **kwargs):
+def replaydata(self, dataname, name=None, **kwargs):
+def resampledata(self, dataname, name=None, **kwargs):
+def rolloverdata(self, *args, **kwargs):
+def run(self, **kwargs):
+def runstop(self):
+def runstrategies(self, iterstrat, predata=False):
+def set_fund_history(self, fund):
+def setbroker(self, broker):
+def signal_accumulate(self, onoff):
+def signal_concurrent(self, onoff):
+def signal_strategy(self, stratcls, *args, **kwargs):
+def stop_writers(self, runstrats):    </code></pre><h4 id="1-2-Cerebro-初始化"><a href="#1-2-Cerebro-初始化" class="headerlink" title="1.2 Cerebro 初始化"></a>1.2 Cerebro 初始化</h4><p>创建一个实例：</p>
+<pre><code>cerebro = bt.Cerebro(**kwargs)</code></pre><p>在实例化的过程中，cerebro 会自动创建三个 observer 对象来监视回测的执行过程：</p>
+<ol>
+<li>broker observer：负责跟踪现金和持仓的变化</li>
+<li>trades observer：负责跟踪交易的有效性</li>
+<li>buy/sell observer：负责记录买卖的执行情况</li>
+</ol>
+<p>如果想要禁止创建，可以使用：</p>
+<pre><code>cerebro.run(stdstats=False)</code></pre><p>如果什么参数都没有的话，cerebro 会执行如下动作：</p>
+<ol>
+<li>创建一个默认的 broker</li>
+<li>操作不收取佣金</li>
+<li>预装载数据源（Data Feed）</li>
+<li>默认的执行模式是 runonce ，也就是批处理操作</li>
+</ol>
+<h4 id="1-3-添加模块"><a href="#1-3-添加模块" class="headerlink" title="1.3 添加模块"></a>1.3 添加模块</h4><pre><code># 添加数据源
+data = bt.feeds.PandasData(dataname=rawdata, datetime=None, open=1, high=2, low=3, close=4, volume=8, openinterest=-1)
+cerebro.adddata(data)
+
+# 添加指标
+cerebro.addindicator(bt.indicators.SMA, period=15)
+
+# 添加仓位管理器
+cerebro.addsizer(bt.sizers.AllInSizer, percents=95)
+
+# 添加策略
+strat_params = {&#39;fast&#39;: 9, &#39;slow&#39;: 20}
+cerebro.addstrategy(bt.MA_CrossOver, **strat_params)
+
+# 添加分析器
+cerebro.addanalyzer(bt.analyzers.SharpeRatio, _name=&#39;_SharpeRatio&#39;)
+
+# 添加观察者
+cerebro.addobserver(bt.ovservers.DrawDown)
+
+# 添加日志类
+cerebro.addwriter(bt.WriterFile, csv=True)
+
+# 添加经纪人
+broker = bt.brokers.IBBroker(host=&#39;127.0.0.1&#39;, port=7496, clientId=35)
+cerebro.setbroker(broker)</code></pre><h4 id="1-4-执行逻辑"><a href="#1-4-执行逻辑" class="headerlink" title="1.4 执行逻辑"></a>1.4 执行逻辑</h4><ol>
+<li>传递每一个 store 的通知</li>
+<li>从 data feed 获取下一组 ticks/bars</li>
+<li>通知 strategy 关于 broker 的订单，交易和现金/价值的通知</li>
+<li>通知 broker 接受排队的订单，并执行挂起的订单</li>
+<li>调用 strategy 的 next 方法，让 strategy 评估新的数据（并且可能发出订单，这些订单被 broker 排队）</li>
+<li>通知 writers 把数据记录到目标位置</li>
+</ol>
+<h4 id="1-5-异常处理和日志记录"><a href="#1-5-异常处理和日志记录" class="headerlink" title="1.5 异常处理和日志记录"></a>1.5 异常处理和日志记录</h4><p>存在四种 Error 类型，其中 BacktraderError 作为基类，其余 Error 类都是它的子类。</p>
+<pre><code># backtrader/error.py 文件
+
+BacktraderError
+FromModuleImportError
+ModuleImportError
+StrategySkipError</code></pre><p>Error 类的基本操作逻辑：</p>
+<pre><code># 异常的抛出
+if something_goes_wrong():
+            raise bt.errors.StrategySkipError</code></pre><pre><code># 异常的捕获
+try:
+    strat = stratcls(*sargs, **skwargs)
+except: bt.errors.StrategySkipError:
+    continue</code></pre><h3 id="2-Data-Feed-数据源"><a href="#2-Data-Feed-数据源" class="headerlink" title="2 Data Feed 数据源"></a>2 Data Feed 数据源</h3><h4 id="2-1-源码分析"><a href="#2-1-源码分析" class="headerlink" title="2.1 源码分析"></a>2.1 源码分析</h4><p>下面是所有的数据源解析器，最常见的是 GenericCSVData 和 PandasData，主要用于策略回测。IBData、OandaData 和 VCData 主要用作实盘交易。</p>
+<pre><code># backtrader/feeds 目录
+
+BacktraderCSVData
+CSVDataBase
+Chainer
+DataClone
+DataFiller
+DataFilter
+GenericCSVData
+IBData
+InfluxDB
+MT4CSVData
+OandaData
+PandasData
+PandasDirectData
+Quandl
+QuandlCSV
+RollOver
+SierraChartCSVData
+VCData
+VChartCSVData
+VChartData
+VChartFile
+YahooFinanceCSVData
+YahooFinanceData
+YahooLegacyCSV</code></pre><p>AbstractDataBase 是数据源解析器的基类，我们可以从它来分析出这些类的共性。</p>
+<pre><code># backtrader/feed.py 中的 AbstractDataBase 类
+
+# 用户设置的参数
+params = (
+    (&#39;dataname&#39;, None),
+    (&#39;name&#39;, &#39;&#39;),
+    (&#39;compression&#39;, 1),
+    (&#39;timeframe&#39;, TimeFrame.Days),
+    (&#39;fromdate&#39;, None),
+    (&#39;todate&#39;, None),
+    (&#39;sessionstart&#39;, None),
+    (&#39;sessionend&#39;, None),
+    (&#39;filters&#39;, []),
+    (&#39;tz&#39;, None),
+    (&#39;tzinput&#39;, None),
+    (&#39;qcheck&#39;, 0.0),
+    (&#39;calendar&#39;, None),
+)
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def _add2stack(self, bar, stash=False):
+def _check(self, forcedata=None):
+def _fromstack(self, forward=False, stash=False):
+def _getnexteos(self):
+def _getstatusname(cls, status):
+def _gettz(self):
+def _gettzinput(self):
+def _last(self, datamaster=None):
+def _load(self):
+def _save2stack(self, erase=False, force=False, stash=False):
+def _start_finish(self):
+def _start(self):
+def _tick_fill(self, force=False):
+def _tick_nullify(self):
+def _timeoffset(self):
+def _updatebar(self, bar, forward=False, ago=0):
+def addfilter_simple(self, f, *args, **kwargs):
+def addfilter(self, p, *args, **kwargs):
+def advance_peek(self):
+def advance(self, size=1, datamaster=None, ticks=True):
+def clone(self, **kwargs):
+def compensate(self, other):
+def copyas(self, _dataname, **kwargs):
+def date2num(self, dt):
+def do_qcheck(self, onoff, qlapse):
+def get_notifications(self):
+def getenvironment(self):
+def getfeed(self):
+def haslivedata(self):
+def islive(self):
+def load(self):
+def next(self, datamaster=None, ticks=True):
+def num2date(self, dt=None, tz=None, naive=True):
+def preload(self):
+def put_notification(self, status, *args, **kwargs):
+def qbuffer(self, savemem=0, replaying=False):
+def replay(self, **kwargs):
+def resample(self, **kwargs):
+def setenvironment(self, env):
+def start(self):
+def stop(self):</code></pre><p>为了具体地了解功能模块的设计，我们选择 GenericCSVData 作为示例进行分析。同时我们将父类的用户参数一同整理在一起，进而更全面了解可以设置的参数集合。</p>
+<pre><code># backtrader/feeds/csvgeneric.py 中的 GenericCSVData 类
+
+# 用户设置的参数，一共采集于 AbstractDataBase、CSVDataBase 和 GenericCSVData 三个类
+params = (
+    # 来自于 AbstractDataBase 基类
+    (&#39;dataname&#39;, None),
+    (&#39;name&#39;, &#39;&#39;),
+    (&#39;compression&#39;, 1),
+    (&#39;timeframe&#39;, TimeFrame.Days),
+    (&#39;fromdate&#39;, None),
+    (&#39;todate&#39;, None),
+    (&#39;sessionstart&#39;, None),
+    (&#39;sessionend&#39;, None),
+    (&#39;filters&#39;, []),
+    (&#39;tz&#39;, None),
+    (&#39;tzinput&#39;, None),
+    (&#39;qcheck&#39;, 0.0),
+    (&#39;calendar&#39;, None),
+
+    # 来自于 CSVDataBase 父类
+    (&#39;headers&#39;, True),
+    (&#39;separator&#39;, &#39;,&#39;),
+
+    # 来自于 GenericCSVData 自身
+    (&#39;nullvalue&#39;, float(&#39;NaN&#39;)),
+    (&#39;dtformat&#39;, &#39;%Y-%m-%d %H:%M:%S&#39;),
+    (&#39;tmformat&#39;, &#39;%H:%M:%S&#39;),
+    (&#39;datetime&#39;, 0),
+    (&#39;time&#39;, -1),
+    (&#39;open&#39;, 1),
+    (&#39;high&#39;, 2),
+    (&#39;low&#39;, 3),
+    (&#39;close&#39;, 4),
+    (&#39;volume&#39;, 5),
+    (&#39;openinterest&#39;, 6),
+)
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def _loadline(self, linetokens):
+def start(self):</code></pre><p>同 GenericCSVData 类似，我们也对 PandasData 进行分析，它在回测研究时也经常被应用到。</p>
+<pre><code># backtrader/feeds/pandafeed.py 中的 PandasData 类
+
+# 用户设置的参数，一共采集于 AbstractDataBase 和 PandasData 两个类
+params = (
+    # 来自于 AbstractDataBase 基类
+    (&#39;dataname&#39;, None),
+    (&#39;name&#39;, &#39;&#39;),
+    (&#39;compression&#39;, 1),
+    (&#39;timeframe&#39;, TimeFrame.Days),
+    (&#39;fromdate&#39;, None),
+    (&#39;todate&#39;, None),
+    (&#39;sessionstart&#39;, None),
+    (&#39;sessionend&#39;, None),
+    (&#39;filters&#39;, []),
+    (&#39;tz&#39;, None),
+    (&#39;tzinput&#39;, None),
+    (&#39;qcheck&#39;, 0.0),
+    (&#39;calendar&#39;, None),
+
+    # 来自于 PandasData 基类
+    (&#39;nocase&#39;, True),
+    (&#39;datetime&#39;, None),
+    (&#39;open&#39;, -1),
+    (&#39;high&#39;, -1),
+    (&#39;low&#39;, -1),
+    (&#39;close&#39;, -1),
+    (&#39;volume&#39;, -1),
+    (&#39;openinterest&#39;, -1),
+)
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def __init__(self):
+def _load(self):
+def start(self):</code></pre><h4 id="2-2-重采样和重放"><a href="#2-2-重采样和重放" class="headerlink" title="2.2 重采样和重放"></a>2.2 重采样和重放</h4><p>重采样方法旨在将小粒度数据合成大粒度数据，只有当所有的小粒度数据全部到齐，才能合成一个大粒度数据。</p>
+<pre><code># Add the resample data instead of the original
+cerebro.resampledata(data,
+                     timeframe=bt.TimeFrame.Weeks,
+                     compression=args.compression)</code></pre><p>重放方法旨在动态地合成大粒度数据，实时根据当前已有的小粒度数据进行合成，因此每个时刻的大粒度数据都存在差异，直到所需要的小粒度数据都到齐后才会停止变化。</p>
+<pre><code># First add the original data - smaller timeframe
+cerebro.replaydata(data,
+                   timeframe=bt.TimeFrame.Weeks,
+                   compression=args.compression)</code></pre><h4 id="2-3-多个周期的数据添加"><a href="#2-3-多个周期的数据添加" class="headerlink" title="2.3 多个周期的数据添加"></a>2.3 多个周期的数据添加</h4><pre><code># 首先添加时间粒度较小的数据
+datapath = args.dataname or &#39;../../datas/2006-day-001.txt&#39;
+data = btfeeds.BacktraderCSVData(dataname=datapath)
+cerebro.adddata(data)  
+
+# 然后再添加时间粒度较大的数据，直接添加或者重采样
+if args.noresample:
+    datapath = args.dataname2 or &#39;../../datas/2006-week-001.txt&#39;
+    data2 = btfeeds.BacktraderCSVData(dataname=datapath)
+    cerebro.adddata(data2) 
+else:
+    cerebro.resampledata(data, timeframe=bt.TimeFrame.Weeks,
+                         compression=1)
+
+cerebro.run()</code></pre><h4 id="2-4-期货数据的滚动"><a href="#2-4-期货数据的滚动" class="headerlink" title="2.4 期货数据的滚动"></a>2.4 期货数据的滚动</h4><p>在期货交易中，由于合约每隔一段时间就会进行交割，因此对于交易者而言如果想要获取连续的数据，往往需要将不同时段的数据进行连接，这里的滚动便是这个意思。</p>
+<pre><code>import backtrader as bt
+
+cerebro = bt.Cerebro()
+data0 = bt.feeds.MyFeed(dataname=&#39;Expiry0&#39;)
+data1 = bt.feeds.MyFeed(dataname=&#39;Expiry1&#39;)
+...
+dataN = bt.feeds.MyFeed(dataname=&#39;ExpiryN&#39;)
+
+drollover = bt.feeds.RollOver(data0, data1, ..., dataN, dataname=&#39;MyRoll&#39;, **kwargs)
+cerebro.adddata(drollover)
+
+cerebro.run()</code></pre><h4 id="2-5-数据过滤器"><a href="#2-5-数据过滤器" class="headerlink" title="2.5 数据过滤器"></a>2.5 数据过滤器</h4><p>下面是所有的数据过滤器，最常见的是 SessionFilter 和 SessionFilterSimple，这两个主要用于过滤掉常规交易时段之外的 bar。</p>
+<pre><code># backtrader/filters 目录
+
+SessionFilter
+SessionFilterSimple
+SessionFilller
+CalendarDays
+BarReplayer_Open
+DaySplitter_Close
+HeikinAshi
+Renko
+DataFilter
+DataFiller</code></pre><p>这里的过滤器继承的基类都不太相同，由于 SessionFilter 更常见，我们使用它的基类 MetaParams 来进行分析。</p>
+<pre><code># backtrader/metabase.py 中的 MetaParams 类
+
+# 没有需要用户设置的参数
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def __new__(meta, name, bases, dct):
+def donew(cls, *args, **kwargs):</code></pre><p>为了具体地了解功能模块的设计，我们选择 SessionFilter 作为示例进行分析，接口设计如下：</p>
+<pre><code># backtrader/filters/session.py 中的 SessionFilter 类
+
+class SessionFilter(object):
+    def __init__(self, data):
+        pass
+
+    def __call__(self, data):
+        if data.p.sessionstart &lt;= data.datetime.time() &lt;= data.p.sessionend:
+            # bar 在 session 中
+            return False  # 告诉外部数据循环可以处理 bar
+
+        # 在常规交易时间之外的 bar
+        data.backwards()  # 从数据堆栈中删除 bar
+        return True  # 告诉外部数据循环获取新的 bar</code></pre><p>过滤器的添加操作：</p>
+<pre><code>data = MyDataFeed(dataname=myname)
+data.addfilter(filter, *args, **kwargs) # 在 Data Feed 实例上进行设置
+
+cerebro.addata(data)</code></pre><h3 id="3-Strategy-策略"><a href="#3-Strategy-策略" class="headerlink" title="3 Strategy 策略"></a>3 Strategy 策略</h3><h4 id="3-1-源码分析"><a href="#3-1-源码分析" class="headerlink" title="3.1 源码分析"></a>3.1 源码分析</h4><p>下面是源码中所有的策略，可以看到只有一个简单的移动平均策略作为示例。</p>
+<pre><code># backtrader/strategies 目录
+
+MA_CrossOver</code></pre><p>Strategy 是 MA_CrossOver 的基类。</p>
+<pre><code># backtrader/strategy.py 中的 Strategy 类
+
+# 没有用户参数
+
+# 所有的内部变量，我们可以由此知道 Strategy 存储了哪些信息
+_orderspending
+_tradespending
+_orders
+_trades
+env
+datas
+dnames
+broker
+stats
+analyzers
+position
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def _addanalyzer_slave(self, ancls, *anargs, **ankwargs):
+def _addanalyzer(self, ancls, *anargs, **ankwargs):
+def _addindicator(self, indcls, *indargs, **indkwargs):
+def _addnotification(self, order, quicknotify=False):
+def _addobserver(self, multi, obscls, *obsargs, **obskwargs):
+def _addsizer(self, sizer, *args, **kwargs):
+def _addwriter(self, writer):
+def _clk_update(self):
+def _getanalyzer_slave(self, idx):
+def _getminperstatus(self):
+def _next_analyzers(self, minperstatus, once=False):
+def _next_observers(self, minperstatus, once=False):
+def _next_open(self):
+def _next(self):
+def _notify(self, qorders=[], qtrades=[]):
+def _oncepost_open(self):
+def _oncepost(self, dt):
+def _periodset(self):
+def _settz(self, tz):
+def _start(self):
+def _stop(self):
+def add_timer(self, when, offset=datetime.timedelta(), repeat=datetime.timedelta(), weekdays=[], weekcarry=False, monthdays=[], monthcarry=True, allow=None, tzdata=None, cheat=False, *args, **kwargs)
+def buy_bracket(self, data=None, size=None, price=None, plimit=None, exectype=bt.Order.Limit, valid=None, tradeid=0, trailamount=None, trailpercent=None, oargs={}, stopprice=None, stopexec=bt.Order.Stop, stopargs={}, limitprice=None, limitexec=bt.Order.Limit, limitargs={}, **kwargs)
+def buy(self, data=None, size=None, price=None, plimit=None, exectype=None, valid=None, tradeid=0, oco=None, trailamount=None, trailpercent=None, parent=None, transmit=True, **kwargs):
+def cancel(self, order):
+def clear(self):
+def close(self, data=None, size=None, **kwargs):
+def getdatabyname(self, name):
+def getdatanames(self):
+def getposition(self, data=None, broker=None):
+def getpositionbyname(self, name=None, broker=None):
+def getpositions(self, broker=None):
+def getpositionsbyname(self, broker=None):
+def getsizer(self):
+def getsizing(self, data=None, isbuy=True):
+def getwriterheaders(self):
+def getwriterinfo(self):
+def getwritervalues(self):
+def next_open(self):
+def nextstart_open(self):
+def notify_cashvalue(self, cash, value):
+def notify_data(self, data, status, *args, **kwargs):
+def notify_fund(self, cash, value, fundvalue, shares):
+def notify_order(self, order):
+def notify_store(self, msg, *args, **kwargs):
+def notify_timer(self, timer, when, *args, **kwargs):
+def notify_trade(self, trade):
+def order_target_percent(self, data=None, target=0.0, **kwargs):
+def order_target_size(self, data=None, target=0, **kwargs):
+def order_target_value(self, data=None, target=0.0, price=None, **kwargs):
+def prenext_open(self):
+def qbuffer(self, savemem=0, replaying=False):
+def sell_bracket(self, data=None, size=None, price=None, plimit=None, exectype=bt.Order.Limit, valid=None, tradeid=0, trailamount=None, trailpercent=None, oargs={}, stopprice=None, stopexec=bt.Order.Stop, stopargs={}, limitprice=None, limitexec=bt.Order.Limit, limitargs={}, **kwargs)
+def sell(self, data=None, size=None, price=None, plimit=None, exectype=None, valid=None, tradeid=0, oco=None, trailamount=None, trailpercent=None, parent=None, transmit=True, **kwargs)
+def set_tradehistory(self, onoff=True):
+def setsizer(self, sizer):
+def start(self):
+def stop(self):</code></pre><p>使用 MA_CrossOver 作为示例进行具体分析。</p>
+<pre><code># backtrader/strategies/sma_crossover.py 中的 MA_CrossOver 类
+
+# 用户设置的参数，一共采集于 MA_CrossOver 和 Strategy 两个类
+params = (
+    (&#39;fast&#39;, 10),
+    (&#39;slow&#39;, 30),
+    (&#39;_movav&#39;, btind.MovAv.SMA)
+)
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def __init__(self):
+def next(self):</code></pre><h4 id="3-2-信号的使用"><a href="#3-2-信号的使用" class="headerlink" title="3.2 信号的使用"></a>3.2 信号的使用</h4><p>使用信号来代替策略进行回测：</p>
+<pre><code>class MySignal(bt.Indicator):
+    lines = (&#39;signal&#39;,)
+    params = ((&#39;period&#39;, 30),)
+
+    def __init__(self):
+        # 默认 signal[0] 大于 0 时多头，小于 0 时空头，等于 0 时不操作
+        self.lines.signal = self.data - bt.indicators.SMA(period=self.p.period)
+
+data = bt.feeds.OneOfTheFeeds(dataname=&#39;mydataname&#39;)
+cerebro.adddata(data)
+
+cerebro.add_signal(bt.SIGNAL_LONGSHORT, MySignal)
+
+# 禁止累积，即在技术指标完全已知的情况下会连续不断的生成交易信号，而这些并不是必要的
+cerebro.signal_accumulate(False)
+
+# 禁止并发，即新订单会并行着生成，而不是等待其他订单的执行完再后依次执行
+cerebro.signal_concurrency(False)
+
+cerebro.run()</code></pre><p>常见的初始化问题：</p>
+<ol>
+<li><p>如何确定买卖操作的数量？</p>
+<blockquote>
+<p>cerebro 实例会自动为策略添加一个 FixedSize sizer</p>
+</blockquote>
+<blockquote>
+<p>最终用户可以使用 cerebro.addsizer 更改 sizer 以改变策略</p>
+</blockquote>
+</li>
+<li><p>订单如何执行？</p>
+<blockquote>
+<p>执行类型为市场订单，有效期为 Good Until Canceled</p>
+</blockquote>
+</li>
+</ol>
+<p>信号的类型：</p>
+<pre><code># backtrader/signal.py
+
+SIGNAL_NONE,
+SIGNAL_LONGSHORT,
+SIGNAL_LONG, SIGNAL_LONG_INV, SIGNAL_LONG_ANY,
+SIGNAL_SHORT, SIGNAL_SHORT_INV, SIGNAL_SHORT_ANY,
+SIGNAL_LONGEXIT, SIGNAL_LONGEXIT_INV, SIGNAL_LONGEXIT_ANY,
+SIGNAL_SHORTEXIT, SIGNAL_SHORTEXIT_INV, SIGNAL_SHORTEXIT_ANY</code></pre><h3 id="4-Indicators-指标"><a href="#4-Indicators-指标" class="headerlink" title="4 Indicators 指标"></a>4 Indicators 指标</h3><h4 id="4-1-源码分析"><a href="#4-1-源码分析" class="headerlink" title="4.1 源码分析"></a>4.1 源码分析</h4><p>下面是所有的指标，其中每一个指标在对应的技术文档中，都会提供对应的计算公式或者参考资料。</p>
+<pre><code># backtrader/indicators 目录
+
+AccelerationDecelerationOscillator
+Accum
+AdaptiveMovingAverage
+AdaptiveMovingAverageEnvelope
+AdaptiveMovingAverageOscillator
+AllN
+AnyN
+ApplyN
+AroonDown
+AroonOscillator
+AroonUp
+AroonUpDown
+AroonUpDownOscillator
+Average
+AverageDirectionalMovementIndex
+AverageDirectionalMovementIndexRating
+AverageTrueRange
+AwesomeOscillator
+BaseApplyN
+BollingerBands
+BollingerBandsPct
+CointN
+CommodityChannelIndex
+CrossDown
+CrossOver
+CrossUp
+DV2
+DemarkPivotPoint
+DetrendedPriceOscillator
+DicksonMovingAverage
+DicksonMovingAverageEnvelope
+DicksonMovingAverageOscillator
+DirectionalIndicator
+DirectionalMovement
+DirectionalMovementIndex
+DoubleExponentialMovingAverage
+DoubleExponentialMovingAverageEnvelope
+DoubleExponentialMovingAverageOscillator
+DownDay
+DownDayBool
+DownMove
+Envelope
+ExponentialMovingAverage
+ExponentialMovingAverageEnvelope
+ExponentialMovingAverageOscillator
+ExponentialSmoothing
+ExponentialSmoothingDynamic
+FibonacciPivotPoint
+FindFirstIndex
+FindFirstIndexHighest
+FindFirstIndexLowest
+FindLastIndex
+FindLastIndexHighest
+FindLastIndexLowest
+Fractal
+HeikinAshi
+Highest
+HullMovingAverage
+HullMovingAverageEnvelope
+HullMovingAverageOscillator
+HurstExponent
+Ichimoku
+KnowSureThing
+LaguerreFilter
+LaguerreRSI
+LinePlotterIndicator
+Lowest
+MACD
+MACDHisto
+MeanDeviation
+MinusDirectionalIndicator
+Momentum
+MomentumOscillator
+MovingAverageBase
+MovingAverageSimple
+MovingAverageSimpleEnvelope
+MovingAverageSimpleOscillator
+NonZeroDifference
+OLS_BetaN
+OLS_Slope_InterceptN
+OLS_TransformationN
+OperationN
+Oscillator
+OscillatorMixIn
+ParabolicSAR
+PercentChange
+PercentRank
+PercentagePriceOscillator
+PercentagePriceOscillatorShort
+PeriodN
+PivotPoint
+PlusDirectionalIndicator
+PrettyGoodOscillator
+PriceOscillator
+RSI_EMA
+RSI_SMA
+RSI_Safe
+RateOfChange
+RateOfChange100
+ReduceN
+RelativeMomentumIndex
+RelativeStrengthIndex
+Signal
+SmoothedMovingAverage
+SmoothedMovingAverageEnvelope
+SmoothedMovingAverageOscillator
+StandardDeviation
+Stochastic
+StochasticFast
+StochasticFull
+SumN
+TripleExponentialMovingAverage
+TripleExponentialMovingAverageEnvelope
+TripleExponentialMovingAverageOscillator
+Trix
+TrixSignal
+TrueHigh
+TrueLow
+TrueRange
+TrueStrengthIndicator
+UltimateOscillator
+UpDay
+UpDayBool
+UpMove
+Vortex
+WeightedAverage
+WeightedMovingAverage
+WeightedMovingAverageEnvelope
+WeightedMovingAverageOscillator
+WilliamsAD
+WilliamsR
+ZeroLagExponentialMovingAverage
+ZeroLagExponentialMovingAverageEnvelope
+ZeroLagExponentialMovingAverageOscillator
+ZeroLagIndicator
+ZeroLagIndicatorEnvelope
+ZeroLagIndicatorOscillator
+haDelta</code></pre><p>Indicator 是上述指标的基类，我们可以从它来分析出这些类的共性。</p>
+<pre><code># backtrader/indicator.py 中的 Indicator 类
+
+# 没有用户参数
+
+# 自带的函数方法
+def advance(self, size=1):
+def preonce_via_prenext(self, start, end):
+def oncestart_via_nextstart(self, start, end):
+def once_via_next(self, start, end):</code></pre><p>使用 PivotPoint 作为示例进行具体分析。</p>
+<pre><code># backtrader/indicators/pivotpoint.py 中的 PivotPoint 类
+
+# 指标的计算结果，一共有五条序列
+lines = (&#39;p&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;r1&#39;, &#39;r2&#39;,)
+
+# 用户设置的参数，一共采集于 PivotPoint 和 Indicator 两个类
+params = (
+    (&#39;open&#39;, False),
+    (&#39;close&#39;, False),
+    (&#39;_autoplot&#39;, True),
+)
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def __init__(self):
+def _plotinit(self):</code></pre><h4 id="4-2-init-方法和-next-方法的比较"><a href="#4-2-init-方法和-next-方法的比较" class="headerlink" title="4.2 init 方法和 next 方法的比较"></a>4.2 init 方法和 next 方法的比较</h4><ul>
+<li>在 <strong>init</strong> 期间中，任何 lines 操作得到的结果都是 lines 对象</li>
+<li>在 next 期间中，任何 lines 操作得到的结果都是常规的 Python 数据类型，如浮点数和布尔值</li>
+</ul>
+<h4 id="4-3-指标绘图的设置"><a href="#4-3-指标绘图的设置" class="headerlink" title="4.3 指标绘图的设置"></a>4.3 指标绘图的设置</h4><p>自定义的指标如果想要在 cerebro.plot() 中绘制出来，需要进行额外的设置。</p>
+<pre><code>myind = MyIndicator(self.data, someparam=value)
+myind.plotinfo.subplot = True # 使用 myind.plotinfo 的参数来对绘制进行设置</code></pre><h4 id="4-4-最小周期和混合周期"><a href="#4-4-最小周期和混合周期" class="headerlink" title="4.4 最小周期和混合周期"></a>4.4 最小周期和混合周期</h4><p>如果自定义指标的话，为了防止系统无法知道周期信息而导致后期处理的异常，我们需要自行设置。</p>
+<pre><code>class SimpleMovingAverage1(Indicator):
+    lines = (&#39;sma&#39;,)
+    params = ((&#39;period&#39;, 20),)
+
+    def __init__(self):
+        self.addminperiod(self.params.period) # 自行添加周期信息
+
+    def next(self):
+        datasum = math.fsum(self.data.get(size=self.p.period))
+        self.lines.sma[0] = datasum / self.p.period</code></pre><p>当存在多个不同周期时（混合周期）指标的计算，我们可以借助 () 操作符进行对齐。这是在 Strategy 里进行操作。</p>
+<pre><code>class St(bt.Strategy):
+    params = dict(multi=True)
+
+    def __init__(self):
+        self.pp = pp = btind.PivotPoint(self.data1)
+        pp.plotinfo.plot = False  # deactivate plotting
+
+        if self.p.multi:
+            pp1 = pp()  # 先整合所有的指标，再使用 s1
+            self.sellsignal = self.data0.close &lt; pp1.s1
+        else:
+            self.sellsignal = self.data0.close &lt; pp.s1() # 只整合 s1 line
+
+cerebro.run(runonce=False) # runonce 需要设置成 False </code></pre><h3 id="5-Orders-订单"><a href="#5-Orders-订单" class="headerlink" title="5 Orders 订单"></a>5 Orders 订单</h3><h4 id="5-1-源码分析"><a href="#5-1-源码分析" class="headerlink" title="5.1 源码分析"></a>5.1 源码分析</h4><p>下面是所有的订单种类，BuyOrder 和 SellOrder 是最基本的操作逻辑，也就是直接买卖订单。</p>
+<pre><code># backtrader/order.py 文件
+
+BuyOrder
+StopBuyOrder
+StopLimitBuyOrder
+SellOrder
+StopSellOrder
+StopLimitSellOrder</code></pre><p>OrderBase 是上述订单的基类，我们可以从它来分析出这些类的共性。</p>
+<pre><code># backtrader/order.py 中的 OrderBase 类
+
+# 用户设置的参数
+params = (
+    (&#39;owner&#39;, None),
+    (&#39;data&#39;, None),
+    (&#39;size&#39;, None), 
+    (&#39;price&#39;, None), 
+    (&#39;pricelimit&#39;, None),
+    (&#39;exectype&#39;, None), 
+    (&#39;valid&#39;, None), 
+    (&#39;tradeid&#39;, 0), 
+    (&#39;oco&#39;, None),
+    (&#39;trailamount&#39;, None), 
+    (&#39;trailpercent&#39;, None),
+    (&#39;parent&#39;, None), 
+    (&#39;transmit&#39;, True),
+    (&#39;simulated&#39;, False),
+    (&#39;histnotify&#39;, False),
+)
+
+# 订单的所有种类
+ExecTypes = [
+        &#39;Market&#39;, 
+        &#39;Close&#39;, 
+        &#39;Limit&#39;, 
+        &#39;Stop&#39;, 
+        &#39;StopLimit&#39;, 
+        &#39;StopTrail&#39;, 
+        &#39;StopTrailLimit&#39;, 
+        &#39;Historical&#39;
+]
+
+# 订单的执行状态
+Status = [
+    &#39;Created&#39;, 
+    &#39;Submitted&#39;, 
+    &#39;Accepted&#39;, 
+    &#39;Partial&#39;, 
+    &#39;Completed&#39;,
+    &#39;Canceled&#39;, 
+    &#39;Expired&#39;, 
+    &#39;Margin&#39;, 
+    &#39;Rejected&#39;,
+]
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def __eq__(self, other):
+def __getattr__(self, name):
+def __init__(self):
+def __ne__(self, other):
+def __setattribute__(self, name, value):
+def __str__(self):
+def _getplimit(self):
+def _setplimit(self, val):
+def accept(self, broker=None):
+def activate(self):
+def active(self):
+def addcomminfo(self, comminfo):
+def addinfo(self, **kwargs):
+def alive(self):
+def brokerstatus(self):
+def cancel(self):
+def clone(self):
+def completed(self):
+def ExecType(cls, exectype):
+def execute(self, dt, size, price,
+def expire(self):
+def getordername(self, exectype=None):
+def getstatusname(self, status=None):
+def isbuy(self):
+def issell(self):
+def margin(self):
+def ordtypename(self, ordtype=None):
+def partial(self):
+def reject(self, broker=None):
+def setposition(self, position):
+def submit(self, broker=None):
+def trailadjust(self, price):</code></pre><p>使用 BuyOrder 作为示例进行具体分析。</p>
+<pre><code># backtrader/order.py 中的 BuyOrder 类
+
+class BuyOrder(Order):
+    ordtype = Order.Buy</code></pre><h4 id="5-2-创建、取消和信息通知"><a href="#5-2-创建、取消和信息通知" class="headerlink" title="5.2 创建、取消和信息通知"></a>5.2 创建、取消和信息通知</h4><pre><code>class St(bt.Strategy):
+
+    def next(self):
+
+        # 在 Stratgy 中使用操作接口返回得到 Order 实例
+        if something_occure1:
+            self.order = self.buy()
+
+        if something_occure2:
+            self.order = self.close()
+
+        if something_occure3:
+            self.order = self.cancel()
+
+    # 对来自经纪人的订单通知进行监听以及处理
+    def notify_order(self, order):
+        if order.isbuy():
+            self.log(&#39;BUY EXECUTED&#39;)
+
+        if order.issell():
+            self.log(&#39;SELL EXECUTED&#39;)</code></pre><h4 id="5-3-目标订单"><a href="#5-3-目标订单" class="headerlink" title="5.3 目标订单"></a>5.3 目标订单</h4><p>根据特定的目标来自动化执行订单交易，比如合约的持仓数量、组合的市值总和、以及组合的市值总和在账户价值的占比。</p>
+<pre><code>class TheStrategy(bt.Strategy):
+
+    params = (
+        (&#39;use_target_size&#39;, False),
+        (&#39;use_target_value&#39;, False),
+        (&#39;use_target_percent&#39;, False),
+    )
+
+    def next(self):
+        if self.p.use_target_size:
+            target = size
+            self.order = self.order_target_size(target=size)
+
+        elif self.p.use_target_value:
+            value = size * 1000
+            self.order = self.order_target_value(target=value)
+
+        elif self.p.use_target_percent:
+            percent = size / 100.0
+            self.order = self.order_target_percent(target=percent)</code></pre><h4 id="5-4-OCO-排他性订单"><a href="#5-4-OCO-排他性订单" class="headerlink" title="5.4 OCO 排他性订单"></a>5.4 OCO 排他性订单</h4><p>在任意数目的订单中，当一个订单被执行时其余订单都会自动取消，也就是只有一个会执行。</p>
+<pre><code>def next(self):
+    ...
+    o1 = self.buy(...)
+    ...
+    o2 = self.buy(..., oco=o1)
+    ...
+    o3 = self.buy(..., oco=o1)  # 也可以只用 oco=o2, o2 已经在o1组中了</code></pre><h4 id="5-5-Bracket-组合订单"><a href="#5-5-Bracket-组合订单" class="headerlink" title="5.5 Bracket 组合订单"></a>5.5 Bracket 组合订单</h4><p>组合订单指的是由多个订单组成的一揽子订单，它们分别是买卖订单、止损订单和止盈订单。</p>
+<pre><code>brackets = self.buy_bracket(limitprice=14.00, price=13.50, stopprice=13.00)</code></pre><p>如果想要手动实现，可以如下。</p>
+<pre><code>mainside = self.buy(price=13.50, exectype=bt.Order.Limit, transmit=False)
+lowside  = self.sell(price=13.00, size=mainside.size, exectype=bt.Order.Stop,
+                     transmit=False, parent=mainside)
+highside = self.sell(price=14.00, size=mainside.size, exectype=bt.Order.Limit,
+                     transmit=True, parent=mainside)</code></pre><h4 id="5-6-期货和现货之间的补偿"><a href="#5-6-期货和现货之间的补偿" class="headerlink" title="5.6 期货和现货之间的补偿"></a>5.6 期货和现货之间的补偿</h4><p>这里的补偿主要指将现货和期货的数据一起添加，同时使用期货数据进行开仓，然后使用现货数据进行平仓的行为。</p>
+<pre><code>cerebro = bt.Cerebro()
+
+data0 = bt.feeds.MyFavouriteDataFeed(dataname=&#39;futurename&#39;)
+cerebro.adddata(data0)
+
+data1 = bt.feeds.MyFavouriteDataFeed(dataname=&#39;spotname&#39;)
+data1.compensate(data0)  # 让系统知道操作数据1会影响数据0
+cerebro.adddata(data1)
+...
+
+cerebro.run()</code></pre><h3 id="6-Broker-经纪人"><a href="#6-Broker-经纪人" class="headerlink" title="6 Broker 经纪人"></a>6 Broker 经纪人</h3><h4 id="6-1-源码分析"><a href="#6-1-源码分析" class="headerlink" title="6.1 源码分析"></a>6.1 源码分析</h4><p>下面是所有的经纪人，最常见的是 BackBroker，主要用于策略回测。IBBroker、OandaBroker 和 VCBroker 主要用作实盘交易。</p>
+<pre><code># backtrader/brokers 目录
+
+BackBroker
+IBBroker
+OandaBroker
+VCBroker</code></pre><p>BrokerBase 是上述经纪人的基类，我们可以从它来分析出这些类的共性。</p>
+<pre><code># backtrader/broker.py 中的 BrokerBase 类
+
+# 用户设置的参数
+params = (
+    (&#39;commission&#39;, CommInfoBase(percabs=True)),
+)
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def __init__(self):
+def add_order_history(self, orders, notify=False):
+def addcommissioninfo(self, comminfo, name=None):
+def buy(self, owner, data, size, price=None, plimit=None,
+def cancel(self, order):
+def get_fundmode(self):
+def get_fundshares(self):
+def get_fundvalue(self):
+def getcash(self):
+def getcommissioninfo(self, data):
+def getposition(self, data):
+def getvalue(self, datas=None):
+def init(self):
+def next(self):
+def sell(self, owner, data, size, price=None, plimit=None,
+def set_fund_history(self, fund):
+def set_fundmode(self, fundmode, fundstartval=None):
+def setcommission(self,
+def start(self):
+def stop(self):
+def submit(self, order):</code></pre><p>使用 BackBroker 作为示例进行具体分析。</p>
+<pre><code># backtrader/brokers/bbroker.py 中的 BackBroker 类
+
+# 用户设置的参数，一共采集于 BackBroker 和 BrokerBase 两个类
+params = (
+    # 来自于 BrokerBase 基类
+    (&#39;commission&#39;, CommInfoBase(percabs=True)),
+
+    # 来自于 BackBroker 自身
+    (&#39;cash&#39;, 10000.0),
+    (&#39;checksubmit&#39;, True),
+    (&#39;eosbar&#39;, False),
+    (&#39;filler&#39;, None),
+    (&#39;slip_perc&#39;, 0.0),
+    (&#39;slip_fixed&#39;, 0.0),
+    (&#39;slip_open&#39;, False),
+    (&#39;slip_match&#39;, True),
+    (&#39;slip_limit&#39;, True),
+    (&#39;slip_out&#39;, False),
+    (&#39;coc&#39;, False),
+    (&#39;coo&#39;, False),
+    (&#39;int2pnl&#39;, True),
+    (&#39;shortcash&#39;, True),
+    (&#39;fundstartval&#39;, 100.0),
+    (&#39;fundmode&#39;, False),
+)
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def __init__(self):
+def _bracketize(self, order, cancel=False):Jul 7, 2023
+def _execute(self, order, ago=None, price=None, cash=None, position=None, dtcoc=None):
+def _get_value(self, datas=None, lever=False):
+def _ococheck(self, order):
+def _ocoize(self, order, oco):
+def _process_fund_history(self):
+def _process_order_history(self):
+def _slip_down(self, pmin, price, doslip=True, lim=False):
+def _slip_up(self, pmax, price, doslip=True, lim=False):
+def _take_children(self, order):
+def _try_exec_close(self, order, pclose):
+def _try_exec_historical(self, order):
+def _try_exec_limit(self, order, popen, phigh, plow, plimit):
+def _try_exec_market(self, order, popen, phigh, plow):
+def _try_exec_stop(self, order, popen, phigh, plow, pcreated, pclose):
+def _try_exec_stoplimit(self, order, popen, phigh, plow, pclose, pcreated, plimit):
+def _try_exec(self, order):
+def add_cash(self, cash):
+def add_order_history(self, orders, notify=True):
+def buy(self, owner, data, size, price=None, plimit=None, exectype=None, valid=None, tradeid=0, oco=None, trailamount=None, trailpercent=None, parent=None, transmit=True, histnotify=False, _checksubmit=True, **kwargs):
+def cancel(self, order, bracket=False):
+def check_submitted(self):
+def get_cash(self):
+def get_fundmode(self):
+def get_fundshares(self):
+def get_fundvalue(self):
+def get_leverage(self):
+def get_notification(self):
+def get_orders_open(self, safe=False):
+def get_value_lever(self, datas=None, mkt=False):
+def get_value(self, datas=None, mkt=False, lever=False):
+def getposition(self, data):
+def init(self):
+def next(self):
+def notify(self, order):
+def orderstatus(self, order):
+def sell(self, owner, data, size, price=None, plimit=None, exectype=None, valid=None, tradeid=0, oco=None, trailamount=None, trailpercent=None, parent=None, transmit=True, histnotify=False, _checksubmit=True, **kwargs):
+def set_cash(self, cash):
+def set_checksubmit(self, checksubmit):
+def set_coc(self, coc):
+def set_coo(self, coo):
+def set_eosbar(self, eosbar):
+def set_filler(self, filler):
+def set_fund_history(self, fund):
+def set_fundmode(self, fundmode, fundstartval=None):
+def set_fundstartval(self, fundstartval):
+def set_int2pnl(self, int2pnl):
+def set_shortcash(self, shortcash):
+def set_slippage_fixed(self, fixed, slip_open=True, slip_limit=True, slip_match=True, slip_out=False):
+def set_slippage_perc(self, perc, slip_open=True, slip_limit=True, slip_match=True, slip_out=False):
+def submit_accept(self, order):
+def submit(self, order, check=True):
+def transmit(self, order, check=True):</code></pre><h4 id="6-2-滑点的设置"><a href="#6-2-滑点的设置" class="headerlink" title="6.2 滑点的设置"></a>6.2 滑点的设置</h4><p>滑点是指由于诸如网络延迟，软件系统以及服务器响应等方面，造成的成交价格与挂单价格之间的差异。在回测阶段中，我们可以自行设置固定数量的滑点，亦或者一定百分比的滑点。</p>
+<pre><code># 固定数量
+BackBroker.set_slippage_fixed(fixed, slip_open=True, slip_limit=True, slip_match=True, slip_out=False)
+
+# 固定百分比
+BackBroker.set_slippage_perc(perc, slip_open=True, slip_limit=True, slip_match=True, slip_out=False)</code></pre><h4 id="6-3-Cheat-On-Open-开盘作弊"><a href="#6-3-Cheat-On-Open-开盘作弊" class="headerlink" title="6.3 Cheat On Open 开盘作弊"></a>6.3 Cheat On Open 开盘作弊</h4><p>使用当天的开盘价来完成订单数量的计算，进而避免使用昨日收盘价计算时，出现次日无法完全交易的可能情况。</p>
+<pre><code>cerebro = bt.Cerebro(cheat_on_open=True)</code></pre><h4 id="6-4-Filler-填充器"><a href="#6-4-Filler-填充器" class="headerlink" title="6.4 Filler 填充器"></a>6.4 Filler 填充器</h4><p>下面是所有的填充器，最常见的是 FixedBarPerc，它会结合用户自定义的交易量百分比和下一时刻真实 bar 的交易量，来限制下一时刻的交易的订单数量。</p>
+<pre><code># backtrader/filler.py 文件
+
+BarPointPerc
+FixedBarPerc
+FixedSize</code></pre><p>上述填充器都是继承 MetaParams，上文有进行介绍。我们使用 FixedBarPerc 作为示例进行具体分析。</p>
+<pre><code># backtrader/filler.py 中的 FixedBarPerc 类
+
+# 用户设置的参数
+params = ((&#39;perc&#39;, 100.0),)
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def __call__(self, order, price, ago):</code></pre><p>填充器的添加操作：</p>
+<pre><code>cerebro.broker.set_filler(bt.broker.fillers.FixedBarPerc())</code></pre><h4 id="6-5-Position-持仓"><a href="#6-5-Position-持仓" class="headerlink" title="6.5 Position 持仓"></a>6.5 Position 持仓</h4><pre><code># backtrader/position.py 中的 Position 类
+
+# 没有用户参数
+
+# 初始化函数，可以看到所有的内部变量，由此知道 Position 存储了哪些信息
+def __init__(self, size=0, price=0.0):
+    self.size = size
+    if size:
+        self.price = self.price_orig = price
+    else:
+        self.price = 0.0
+
+    self.adjbase = None
+
+    self.upopened = size
+    self.upclosed = 0
+    self.set(size, price)
+
+    self.updt = None
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def __bool__(self):
+def __init__(self, size=0, price=0.0):
+def __len__(self):
+def __str__(self):
+def clone(self):
+def fix(self, size, price):
+def pseudoupdate(self, size, price):
+def set(self, size, price):
+def update(self, size, price, dt=None):</code></pre><h4 id="6-6-Trade-交易"><a href="#6-6-Trade-交易" class="headerlink" title="6.6 Trade 交易"></a>6.6 Trade 交易</h4><pre><code># backtrader/trader.py 中的 Trade 类
+
+# 没有用户参数
+
+# 初始化函数，可以看到所有的内部变量，由此知道 Position 存储了哪些信息
+def __init__(self, data=None, tradeid=0, historyon=False,
+             size=0, price=0.0, value=0.0, commission=0.0):
+
+    self.ref = next(self.refbasis)
+    self.data = data
+    self.tradeid = tradeid
+    self.size = size
+    self.price = price
+    self.value = value
+    self.commission = commission
+
+    self.pnl = 0.0
+    self.pnlcomm = 0.0
+
+    self.justopened = False
+    self.isopen = False
+    self.isclosed = False
+
+    self.baropen = 0
+    self.dtopen = 0.0
+    self.barclose = 0
+    self.dtclose = 0.0
+    self.barlen = 0
+
+    self.historyon = historyon
+    self.history = list()
+
+    self.status = self.Created
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def __bool__(self):
+def __init__(self, data=None, tradeid=0, historyon=False, size=0, price=0.0, value=0.0, commission=0.0):
+def __len__(self):
+def __str__(self):
+def close_datetime(self, tz=None, naive=True):
+def getdataname(self):
+def open_datetime(self, tz=None, naive=True):
+def update(self, order, size, price, value, commission, pnl, comminfo):</code></pre><h3 id="7-Commissions-Schemes-佣金方案"><a href="#7-Commissions-Schemes-佣金方案" class="headerlink" title="7 Commissions Schemes 佣金方案"></a>7 Commissions Schemes 佣金方案</h3><h4 id="7-1-源码分析"><a href="#7-1-源码分析" class="headerlink" title="7.1 源码分析"></a>7.1 源码分析</h4><p>下面是所有的佣金设置，主要分成股票佣金的设置和期货佣金的设置。</p>
+<pre><code># backtrader/commissions 目录
+
+CommissionInfo
+CommInfo_Futures_Fixed
+CommInfo_Futures_Perc
+CommInfo_Stocks_Fixed
+CommInfo_Stocks_Perc</code></pre><p>CommInfoBase 是佣金设置的基类，我们可以从它来分析出这些类的共性。</p>
+<pre><code># backtrader/comminfo.py 中的 CommInfoBase 类
+
+# 用户设置的参数
+params = (
+    (&#39;commission&#39;, 0.0), 
+    (&#39;mult&#39;, 1.0), 
+    (&#39;margin&#39;, None),
+    (&#39;commtype&#39;, None),
+    (&#39;stocklike&#39;, False),
+    (&#39;percabs&#39;, False),
+    (&#39;interest&#39;, 0.0),
+    (&#39;interest_long&#39;, False),
+    (&#39;leverage&#39;, 1.0),
+    (&#39;automargin&#39;, False),
+)
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def __init__(self):
+def _get_credit_interest(self, data, size, price, days, dt0, dt1):
+def _getcommission(self, size, price, pseudoexec):
+def cashadjust(self, size, price, newprice):
+def confirmexec(self, size, price):
+def get_credit_interest(self, data, pos, dt):
+def get_leverage(self):
+def get_margin(self, price):
+def getcommission(self, size, price):
+def getoperationcost(self, size, price):
+def getsize(self, price, cash):
+def getvalue(self, position, price):
+def getvaluesize(self, size, price):
+def margin(self):
+def profitandloss(self, size, price, newprice):
+def stocklike(self):</code></pre><p>使用 CommissionInfo 作为示例进行具体分析。</p>
+<pre><code># backtrader/commissions/__init__.py 中的 CommissionInfo 类
+
+# 用户设置的参数，一共采集于 CommissionInfo 和 CommInfoBase 两个类
+params = (
+    # 来自 CommInfoBase 基类
+    (&#39;commission&#39;, 0.0), 
+    (&#39;mult&#39;, 1.0), 
+    (&#39;margin&#39;, None),
+    (&#39;commtype&#39;, None),
+    (&#39;stocklike&#39;, False),
+    (&#39;percabs&#39;, False),
+    (&#39;interest&#39;, 0.0),
+    (&#39;interest_long&#39;, False),
+    (&#39;leverage&#39;, 1.0),
+    (&#39;automargin&#39;, False),
+
+    # 来自 CommissionInfo 本身
+    (&#39;percabs&#39;, True),
+)
+
+# 没有自带的函数方法
+</code></pre><h4 id="7-2-佣金的设置"><a href="#7-2-佣金的设置" class="headerlink" title="7.2 佣金的设置"></a>7.2 佣金的设置</h4><pre><code># 股票设置
+cerebro.broker.setcommission(commission=0.005)
+
+# 期货设置
+cerebro.broker.setcommission(commission=2.0, margin=2000.0, mult=10.0)</code></pre><h3 id="8-Analyzers-分析器"><a href="#8-Analyzers-分析器" class="headerlink" title="8 Analyzers 分析器"></a>8 Analyzers 分析器</h3><h4 id="8-1-源码分析"><a href="#8-1-源码分析" class="headerlink" title="8.1 源码分析"></a>8.1 源码分析</h4><p>下面是所有的分析器，他们用于记录策略回测过程中评估指标的计算结果。</p>
+<pre><code># backtrader/analyzers 目录
+
+AnnualReturn
+Calmar
+DrawDown
+TimeDrawDown
+GrossLeverage
+PositionsValue
+PyFolio
+LogReturnsRolling
+PeriodStats
+Returns
+SharpeRatio
+SharpeRatio_A
+SQN
+TimeReturn
+TradeAnalyzer
+Transactions
+VWR</code></pre><p>Analyzer 是上述分析器的基类，我们可以从它来分析出这些类的共性。</p>
+<pre><code># backtrader/analyzer.py 中的 Analyzer 类
+
+# 没有用户参数
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def __len__(self):
+def _next(self):
+def _nextstart(self):
+def _notify_cashvalue(self, cash, value):
+def _notify_fund(self, cash, value, fundvalue, shares):
+def _notify_order(self, order):
+def _notify_trade(self, trade):
+def _prenext(self):
+def _register(self, child):
+def _start(self):
+def _stop(self):
+def create_analysis(self):
+def get_analysis(self):
+def next(self):
+def nextstart(self):
+def notify_cashvalue(self, cash, value):
+def notify_fund(self, cash, value, fundvalue, shares):
+def notify_order(self, order):
+def notify_trade(self, trade):
+def pprint(self, *args, **kwargs):
+def prenext(self):
+def print(self, *args, **kwargs):
+def start(self):
+def stop(self):</code></pre><p>使用 SharpeRatio 作为示例进行具体分析。</p>
+<pre><code># backtrader/analyzers/sharpe.py 中的 SharpeRatio 类
+
+# 用户设置的参数
+params = (
+    (&#39;timeframe&#39;, TimeFrame.Years),
+    (&#39;compression&#39;, 1),
+    (&#39;riskfreerate&#39;, 0.01),
+    (&#39;factor&#39;, None),
+    (&#39;convertrate&#39;, True),
+    (&#39;annualize&#39;, False),
+    (&#39;stddev_sample&#39;, False),
+    (&#39;daysfactor&#39;, None),
+    (&#39;legacyannual&#39;, False),
+    (&#39;fund&#39;, None),
+)
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用   
+def __init__(self):
+def stop(self):</code></pre><h4 id="8-2-基本操作"><a href="#8-2-基本操作" class="headerlink" title="8.2 基本操作"></a>8.2 基本操作</h4><pre><code># 添加分析器
+cerebro.addanalyzer(bt.analyzers.SharpeRatio, _name=&#39;_SharpeRatio&#39;)
+
+results = cerebro.run()
+strat = results[0]
+
+# 得到分析器的记录
+print(&#39;夏普比率:&#39;, strat.analyzers._SharpeRatio.get_analysis()) </code></pre><h4 id="8-3-PyFolio-的结合"><a href="#8-3-PyFolio-的结合" class="headerlink" title="8.3 PyFolio 的结合"></a>8.3 PyFolio 的结合</h4><pre><code># 首先添加 pyfolio 分析器
+cerebro.addanalyzer(bt.analyzers.PyFolio, _name=&#39;_Pyfolio&#39;)
+
+results = cerebro.run()
+strat = results[0]
+
+# 回测结束，得到 pyfolio 记录结果
+pyfoliozer = strat.analyzers.getbyname(&#39;_Pyfolio&#39;)
+returns, positions, transactions, gross_lev = pyfoliozer.get_pf_items()
+
+# 导入 pyfolio 工具包进行调用
+import pyfolio as pf
+pf.create_full_tear_sheet(returns,
+                          benchmark_rets=benchmark_ret,
+                          positions=positions,
+                          transactions=transactions)</code></pre><h3 id="9-Observers-观察者"><a href="#9-Observers-观察者" class="headerlink" title="9 Observers 观察者"></a>9 Observers 观察者</h3><h4 id="9-1-源码分析"><a href="#9-1-源码分析" class="headerlink" title="9.1 源码分析"></a>9.1 源码分析</h4><p>下面是所有的观察器，它的结果将会呈现在 cerebro.plot 绘制的图形上。</p>
+<pre><code># backtrader/observers 目录
+
+Benchmark
+Broker
+Broker - Cash
+Broker - Value
+BuySell
+DrawDown
+TimeReturn
+Trades
+LogReturns
+LogReturns2
+FundValue
+FundShares</code></pre><p>Observers 是上述观察器的基类，我们可以从它来分析出这些类的共性。</p>
+<pre><code># backtrader/observer.py 中的 Observers 类
+
+# 没有用户参数
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用 
+def _register_analyzer(self, analyzer):
+def _start(self):
+def prenext(self):
+def start(self):</code></pre><p>使用 TimeReturn 作为示例进行具体分析。</p>
+<pre><code># backtrader/observers/timereturn.py 中的 TimeReturn 类
+
+# 用户设置参数
+params = (
+    (&#39;timeframe&#39;, None),
+    (&#39;compression&#39;, None),
+    (&#39;fund&#39;, None),
+)
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用 
+def __init__(self):
+def _plotlabel(self):
+def next(self):</code></pre><h4 id="9-2-保存统计信息"><a href="#9-2-保存统计信息" class="headerlink" title="9.2 保存统计信息"></a>9.2 保存统计信息</h4><pre><code>class MyStrategy(bt.Strategy):
+
+    def start(self):
+
+        self.mystats = open(&#39;mystats.csv&#39;, &#39;wb&#39;)
+        # 持久化观察器的记录信息
+        self.mystats.write(&#39;datetime,drawdown, maxdrawdown\n&#39;)
+
+    def next(self):
+        # 持久化观察器的记录信息
+        self.mystats.write(self.data.datetime.date(0).strftime(&#39;%Y-%m-%d&#39;))
+        self.mystats.write(&#39;,%.2f&#39; % self.stats.drawdown.drawdown[-1])
+        self.mystats.write(&#39;,%.2f&#39; % self.stats.drawdown.maxdrawdown-1])
+        self.mystats.write(&#39;\n&#39;)</code></pre><h3 id="10-Sizers-仓位管理器"><a href="#10-Sizers-仓位管理器" class="headerlink" title="10 Sizers 仓位管理器"></a>10 Sizers 仓位管理器</h3><h4 id="10-1-源码分析"><a href="#10-1-源码分析" class="headerlink" title="10.1 源码分析"></a>10.1 源码分析</h4><p>下面是所有的仓位管理器，最常见的是 FixedSize 和 PercentSizer，这两个主要用于控制每次买卖的合约数量，比如以每次买卖固定数量的合约，亦或者以一定比例的账户价值来买卖。</p>
+<pre><code># backtrader/sizers 目录
+
+FixedSize
+FixedReverser
+FixedSizeTarget
+PercentSizer
+PercentSizerInt
+AllInSizer
+AllInSizerInt</code></pre><p>Sizer 是上述仓位管理器的基类，我们可以从它来分析出这些类的共性。</p>
+<pre><code># backtrader/sizer.py 中的 Sizer 类
+
+# 没有用户参数
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def _getsizing(self, comminfo, cash, data, isbuy):
+def getsizing(self, data, isbuy):
+def set(self, strategy, broker):</code></pre><p>使用 FixedSize 作为示例进行具体分析。</p>
+<pre><code># 没有用户参数
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def _getsizing(self, comminfo, cash, data, isbuy):
+def setsizing(self, stake):</code></pre><h4 id="10-2-cerebro-和-strategy-中的设置"><a href="#10-2-cerebro-和-strategy-中的设置" class="headerlink" title="10.2 cerebro 和 strategy 中的设置"></a>10.2 cerebro 和 strategy 中的设置</h4><pre><code># 在 cerebro 实例中进行添加 sizer 仓位管理器
+cerebro = bt.Cerebro()
+cerebro.addsizer(bt.sizers.SizerFix, stake=20)  # 直接添加
+
+idx = cerebro.addstrategy(MyStrategy, myparam=myvalue)
+cerebro.addsizer_byidx(idx, bt.sizers.SizerFix, stake=5)
+
+cerebro.addstrategy(MyOtherStrategy)</code></pre><pre><code># 在 Strategy 类里进行添加 sizer 仓位管理器
+class MyStrategy(bt.Strategy):
+    params = ((&#39;sizer&#39;, None),)
+
+    def __init__(self):
+        if self.p.sizer is not None:
+            self.sizer = self.p.sizer # 添加用户传递的 sizer</code></pre><h3 id="11-Live-Trading-实盘交易"><a href="#11-Live-Trading-实盘交易" class="headerlink" title="11 Live Trading 实盘交易"></a>11 Live Trading 实盘交易</h3><h4 id="11-1-源码分析"><a href="#11-1-源码分析" class="headerlink" title="11.1 源码分析"></a>11.1 源码分析</h4><p>下面是所有的 Store 商店，它们分别是各个经纪平台的对接接口，是实盘交易的核心组件。</p>
+<pre><code># backtrader/stores 目录
+
+IBStore
+OandaStore
+VChartFile
+VCStore</code></pre><p>MetaSingleton 是上述 Store 商店的基类，我们可以从它来分析出这些类的共性。</p>
+<pre><code># backtrader/stores/ibstore.py 中的 MetaSingleton 类
+
+class MetaSingleton(MetaParams):
+    &#39;&#39;&#39;Metaclass to make a metaclassed class a singleton&#39;&#39;&#39;
+    def __init__(cls, name, bases, dct):
+        super(MetaSingleton, cls).__init__(name, bases, dct)
+        cls._singleton = None
+
+    def __call__(cls, *args, **kwargs):
+        if cls._singleton is None:
+            cls._singleton = (
+                super(MetaSingleton, cls).__call__(*args, **kwargs))
+
+        return cls._singleton</code></pre><p>使用 IBStore 作为示例进行具体分析。</p>
+<pre><code># backtrader/stores/ibstore.py 中的 IBStore 类
+
+# 用户设置的参数
+params = (
+    (&#39;host&#39;, &#39;127.0.0.1&#39;),
+    (&#39;port&#39;, 7496),
+    (&#39;clientId&#39;, None),
+    (&#39;notifyall&#39;, False),
+    (&#39;_debug&#39;, False),
+    (&#39;reconnect&#39;, 3),
+    (&#39;timeout&#39;, 3.0),
+    (&#39;timeoffset&#39;, True),
+    (&#39;timerefresh&#39;, 60.0),
+    (&#39;indcash&#39;, True),
+)
+
+# 自带的函数方法，其中 _ 开头的方法是私有方法，作为内部工具使用
+def key2fn(x):
+def keyfn(x):
+def __init__(self):
+def accountDownloadEnd(self, msg):
+def calcduration(self, dtbegin, dtend):
+def calcdurations(self, dtbegin, dtend):
+def cancelHistoricalData(self, q):
+def cancelMktData(self, q):
+def cancelOrder(self, orderid):
+def cancelQueue(self, q, sendnone=False):
+def cancelRealTimeBars(self, q):
+def commissionReport(self, msg):
+def connected(self):
+def connectionClosed(self, msg):
+def contractDetails(self, msg):
+def contractDetailsEnd(self, msg):
+def currentTime(self, msg):
+def dt_plus_duration(self, dt, duration):
+def error(self, msg):
+def execDetails(self, msg):
+def get_acc_cash(self, account=None):
+def get_acc_value(self, account=None):
+def get_acc_values(self, account=None):
+def get_notifications(self):
+def getbroker(cls, *args, **kwargs):
+def getContractDetails(self, contract, maxcount=None):
+def getdata(cls, *args, **kwargs):
+def getdurations(self,  timeframe, compression):
+def getmaxduration(self, timeframe, compression):
+def getposition(self, contract, clone=False):
+def getTickerQueue(self, start=False):
+def histduration(self, dt1, dt2):
+def historicalData(self, msg):
+def logmsg(self, *args):
+def makecontract(self, symbol, sectype, exch, curr, expiry=&#39;&#39;, strike=0.0, right=&#39;&#39;, mult=1)
+def managedAccounts(self, msg):
+def nextOrderId(self):
+def nextTickerId(self):
+def nextValidId(self, msg):
+def openOrder(self, msg):
+def orderStatus(self, msg):
+def placeOrder(self, orderid, contract, order):
+def position(self, msg):
+def realtimeBar(self, msg):
+def reconnect(self, fromstart=False, resub=False):
+def reqAccountUpdates(self, subscribe=True, account=None):
+def reqContractDetails(self, contract):
+def reqCurrentTime(self):
+def reqHistoricalData(self, contract, enddate, duration, barsize, what=None, useRTH=False, tz=&#39;&#39;, sessionend=None):
+def reqHistoricalDataEx(self, contract, enddate, begindate, timeframe, compression, what=None, useRTH=False, tz=&#39;&#39;, sessionend=None, tickerId=None):
+def reqMktData(self, contract, what=None):
+def reqPositions(self):
+def reqRealTimeBars(self, contract, useRTH=False, duration=5):
+def reuseQueue(self, tickerId):
+def start(self, data=None, broker=None):
+def startdatas(self):
+def stop(self):
+def stopdatas(self):
+def tfcomp_to_size(self, timeframe, compression):
+def tickPrice(self, msg):
+def tickString(self, msg):
+def timeoffset(self):
+def updateAccountValue(self, msg):
+def updatePortfolio(self, msg):
+def validQueue(self, q):
+def watcher(self, msg):</code></pre><h4 id="11-2-存储模型与直接模型"><a href="#11-2-存储模型与直接模型" class="headerlink" title="11.2 存储模型与直接模型"></a>11.2 存储模型与直接模型</h4><p>平台提供了两种方式来与经纪平台互动的方式，分别是存储模型与直接模型，它们都可以从远程服务器中接收实时数据进行处理，但相比之下存储模型会更加推荐，因为它更具有清晰的分离模式。</p>
+<pre><code># 存储模型
+ibstore = bt.stores.IBStore(host=&#39;127.0.0.1&#39;, port=7496, clientId=35)
+data = ibstore.getdata(dataname=&#39;EUR.USD-CASH-IDEALPRO&#39;)</code></pre><pre><code># 直接模型
+data = bt.feeds.IBData(dataname=&#39;EUR.USD-CASH-IDEALPRO&#39;,
+                       host=&#39;127.0.0.1&#39;, port=7496, clientId=35)</code></pre>
+            </div>
+            <hr />
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">写作不易，客官能否打赏一杯奶茶？</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        <p class="reprint-tip">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+            <span>转载规则</span>
+        </p>
+        
+            <div class="center-align">
+                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                    <img alt=""
+                         style="border-width:0"
+                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>
+                </a>
+            </div>
+            <br/>
+            <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
+                  property="dct:title" rel="dct:type">
+                    《应用实操｜回测框架 backtrader 表层接口的整理归纳》
+                </span> 由
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2023/07/11/ying-yong-shi-cao-backtrader-ji-zhu-wen-dang-de-zheng-li-gui-na/" property="cc:attributionName"
+               rel="cc:attributionURL">
+                兴明
+            </a> 采用
+            <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                知识共享署名 4.0 国际许可协议
+            </a>进行许可。
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+        </div>
+    </div>
+
+    
+    <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '20a71f68d33d6926d0f9',
+        clientSecret: 'b6b0fb2bd17e508bd69d074cd6bc269025eab473',
+        repo: 'superman0010.github.io',
+        owner: 'superman0010',
+        admin: "superman0010",
+        id: '2023/07/11/ying-yong-shi-cao-backtrader-ji-zhu-wen-dang-de-zheng-li-gui-na/',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+    <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments input[type=text],
+    #vcomments input[type=email],
+    #vcomments input[type=url],
+    #vcomments textarea {
+        box-sizing: border-box;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #42b983;
+        font-weight: 500;
+        text-decoration: underline;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div id="vcomments" class="card-content"></div>
+</div>
+
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
+<!-- <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script> -->
+
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: '查教程获取',
+        appKey: '查教程获取',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'false' === 'true',
+        avatar: 'wavatar',
+        pageSize: '10',
+        lang: 'zh-cn',
+        placeholder: '如果你没有GitHub账号，还可以在这里评论啦！'
+    });
+</script>
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2023/09/30/yan-bao-qian-chang-hua-tai-zheng-quan-ren-gong-zhi-neng-xi-lie-bu-fen-xuan-ji-zong-jie/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="研报浅尝 | 华泰证券人工智能系列部分选集总结">
+                        
+                        <span class="card-title">研报浅尝 | 华泰证券人工智能系列部分选集总结</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            研报浅尝 | 华泰证券人工智能系列部分选集总结0 介绍
+
+
+一级目录
+二级目录
+补充
+
+
+
+1《人工智能 13: 人工智能选股之损失函数的改进》
+1.1 研究内容
+
+
+
+
+1.2 实验结果：加权损失函数、广义损失函数
+
+
+
+2《人工智能 1
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2023-09-30
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/量化交易/" class="post-category" target="_blank">
+                                    量化交易
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/金融/" target="_blank">
+                        <span class="chip bg-color">金融</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/06/27/gao-wei-shu-ju-shang-de-su-yin-fa-xian-ji-gu-piao-yu-ce/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="论文浅尝｜高维数据中的因果溯因以及在股市中的应用">
+                        
+                        <span class="card-title">论文浅尝｜高维数据中的因果溯因以及在股市中的应用</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            论文浅尝｜高维数据中的因果溯因以及在股市中的应用
+
+ 来源：Soft Computing - A Fusion of Foundations, Methodologies and Applications
+ 链接：https://link.
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2023-06-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/量化交易/" class="post-category" target="_blank">
+                                    量化交易
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/金融/" target="_blank">
+                        <span class="chip bg-color">金融</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 兴明的博客<br />'
+            + '作者: 兴明<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () { bodyElement.removeChild(newdiv); }, 200);
+    });
+</script>
+
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+		/*
+    const btw = new BTWPlugin();
+    btw.init({
+        id: 'artDetail',
+        blogId: '20962-1585405055583-879',
+        name: '算法码上来',
+        qrcode: 'https://godweiyang.com/medias/gzh.jpg',
+        keyword: 'VIP',
+    });
+   */
+</script>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h1, h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
+    });
+</script>
+
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+<!-- 代码语言 -->
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+<!-- 代码块复制 -->
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/clipboard.min.js"></script>
+<!-- 代码块收缩 -->
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script> 
+<!-- 代码块折行 -->
+<style type="text/css">code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }</style>
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            &copy; 2021-2021 XingMing. 版权所有
+
+            
+            &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+            <span class="white-color">136.9k</span>
+            
+
+            <br>
+            <span id="sitetime"></span>
+
+            
+            
+            <br>
+            
+            <span id="busuanzi_container_site_pv" style='display:none'>
+                <i class="fa fa-heart-o"></i>
+                本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv" style='display:none'>
+                人次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+            </span>
+            
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/superman0010" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:muyes88@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+<!--
+
+
+
+    <a href="http://wpa.qq.com/msgrd?v=3&uin=1320563812&site=qq&menu=yes" class="tooltipped" target="_blank" data-tooltip="访问我的知乎" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+-->
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fa fa-rss"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+    $(document).ready(function () {
+
+        var int = setInterval(fixCount, 50);
+        var pvcountOffset = 0;
+        var uvcountOffset = 0;
+
+        function fixCount() {
+            if (document.getElementById("busuanzi_container_site_pv").style.display != "none") {
+                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + pvcountOffset);
+                clearInterval(int);
+            }
+            if ($("#busuanzi_container_site_pv").css("display") != "none") {
+                $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据 
+                clearInterval(int);
+            }
+        }
+    });
+</script>
+
+<script language=javascript>
+    function siteTime() {
+        window.setTimeout("siteTime()", 1000);
+        var seconds = 1000;
+        var minutes = seconds * 60;
+        var hours = minutes * 60;
+        var days = hours * 24;
+        var years = days * 365;
+        var today = new Date();
+        var todayYear = today.getFullYear();
+        var todayMonth = today.getMonth() + 1;
+        var todayDate = today.getDate();
+        var todayHour = today.getHours();
+        var todayMinute = today.getMinutes();
+        var todaySecond = today.getSeconds();
+        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+        year - 作为date对象的年份，为4位年份值
+        month - 0-11之间的整数，做为date对象的月份
+        day - 1-31之间的整数，做为date对象的天数
+        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+        minutes - 0-59之间的整数，做为date对象的分钟数
+        seconds - 0-59之间的整数，做为date对象的秒数
+        microseconds - 0-999之间的整数，做为date对象的毫秒数 */
+        var t1 = Date.UTC(2021, 05, 08, 00, 00, 00); //北京时间2018-2-13 00:00:00
+        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+        var diff = t2 - t1;
+        var diffYears = Math.floor(diff / years);
+        var diffDays = Math.floor((diff / days) - diffYears * 365);
+        var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+        var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
+        var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
+        document.getElementById("sitetime").innerHTML = "本站已运行 " + diffYears + " 年 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+    }/*因为建站时间还没有一年，就将之注释掉了。需要的可以取消*/
+    siteTime();
+</script>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <script type="text/javascript"> var OriginTitile = document.title, st; document.addEventListener("visibilitychange", function () { document.hidden ? (document.title = "Σ(っ °Д °;)っ喔哟，崩溃啦！", clearTimeout(st)) : (document.title = "φ(゜▽゜*)♪咦，又好了！", st = setTimeout(function () { document.title = OriginTitile }, 3e3)) })
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=查教程获取"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', '查教程获取');
+</script>
+
+
+
+    
+    <script src="/libs/others/clicklove.js"></script>
+    
+
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    <!-- 雪花特效 -->
+    
+
+</body>
+
+</html>
