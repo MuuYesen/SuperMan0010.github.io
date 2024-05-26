@@ -515,7 +515,7 @@
             <div id="articleContent">
                 <h2 id="trade-learn-的一些反思"><a href="#trade-learn-的一些反思" class="headerlink" title="trade-learn 的一些反思"></a>trade-learn 的一些反思</h2><p>关于上周的 trade-learn 项目，我想再补充一些内容。</p>
 <p>对于 trade-learn，我们内部其实设定的是围绕高频交易的策略实盘系统，现在它以工具包的形式发布，事实上也被迫砍了许多许多，不可否认地，系统往往是要比工具包更加复杂的。</p>
-<p>trade-learn 开源的是教研版本，因为它采用 backtrader 作为底层的回测系统，而 python 作为毫秒级的解释性语言在微秒纳秒的交易上还是多少力不从心，同时没有开放实盘交易的功能。</p>
+<p>trade-learn 开源的是教研版本，因为它采用 backtrader 作为底层的回测系统，python 作为毫秒级的解释性语言在微秒纳秒的交易上还是多少力不从心，同时也没有开放实盘交易的功能。</p>
 <p>作为系统衍生出来的工具包，它必然也隐含了对应的实盘设计理念：</p>
 <ul>
 <li>它现在的策略模块的设计已经考虑了后续如何尽少改动地对接 tradingview，也就是主观量化的缠论体系，以及如何对接各类交易所的仿真交易 api 接口；</li>
