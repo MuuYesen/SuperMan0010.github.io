@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>trade-learn 的一些反思</title>
+      <link href="/2024/05/26/trade-learn-de-yi-xie-fan-si/"/>
+      <url>/2024/05/26/trade-learn-de-yi-xie-fan-si/</url>
+      
+        <content type="html"><![CDATA[<h2 id="trade-learn-的一些反思"><a href="#trade-learn-的一些反思" class="headerlink" title="trade-learn 的一些反思"></a>trade-learn 的一些反思</h2><p>关于上周的 trade-learn 项目，我想再补充一些内容。对于 trade-learn，我们内部其实设定的是围绕高频交易的策略实盘系统，它现在以工具包的形式发布，事实上被迫砍了许多许多，系统往往是要比工具包更加复杂的。</p><p>之所以上周称它为教研版本，是因为底层的回测系统以 python 进行编写，毫秒级的解释性语言在微秒纳秒的交易上还是多少力不从心，当然对于分钟级策略而言还是可以接受的。</p><p>作为系统衍生出来的工具包，它必然也隐含了对应的设计理念，比如它现在的策略模块的设计已经考虑了后续如何尽少改动地对接 tradingview 的缠论体系，以及对接仿真交易的 api 接口，现在推出来的行情接口有外股也有内股，便也是对应了后续仿真交易接口的种类，同时行情及指标计算始终对标现有交易平台也隐含了量化实盘所需的严谨性。</p><p>对于实盘而言，教研工具包还是很多东西无法直接提供的，包括策略版本控制、用户实时交互、日志采集机制、实盘容灾方案等等。</p><p>怎么说呢，这个项目花了整整一年，还是倾注了许多心血的，但和大公司病一样，PPT越来越大，面对越来越大的愿景，反而很难有完成的勇气，目前是简单推出一版作为暂以告落。</p><p>先让我回归生活吧，有心力的时候再继续完善，公众号也暂时停更一段时间。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 量化交易 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 金融 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>2023年终总结</title>
       <link href="/2023/12/16/2023-nian-zhong-zong-jie/"/>
       <url>/2023/12/16/2023-nian-zhong-zong-jie/</url>
