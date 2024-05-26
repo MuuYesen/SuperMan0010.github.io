@@ -8,7 +8,8 @@
     <meta name="baidu-site-verification" content="code-QUQTjeai5V">
     <meta name="google-site-verification" content="code-QUQTjeai5V">
     <meta name="360-site-verification" content="code-QUQTjeai5V">
-    <meta name="description" content="trade-learn 的一些反思关于上周的 trade-learn 项目，我想再补充一些内容。对于 trade-learn，我们内部其实设定的是围绕高频交易的策略实盘系统，它现在以工具包的形式发布，事实上被迫砍了许多许多，系统往往是要比工">
+    <meta name="description" content="trade-learn 的一些反思关于上周的 trade-learn 项目，我想再补充一些内容。
+对于 trade-learn，我们内部其实设定的是围绕高频交易的策略实盘系统，它以工具包的形式发布，事实上也被迫砍了许多许多，不可否认地，系统">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -489,7 +490,7 @@
                 
                 <div class="info-break-policy">
                     <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    456
+                    509
                 </div>
                 
 
@@ -512,11 +513,17 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="trade-learn-的一些反思"><a href="#trade-learn-的一些反思" class="headerlink" title="trade-learn 的一些反思"></a>trade-learn 的一些反思</h2><p>关于上周的 trade-learn 项目，我想再补充一些内容。对于 trade-learn，我们内部其实设定的是围绕高频交易的策略实盘系统，它现在以工具包的形式发布，事实上被迫砍了许多许多，系统往往是要比工具包更加复杂的。</p>
-<p>之所以上周称它为教研版本，是因为底层的回测系统以 python 进行编写，毫秒级的解释性语言在微秒纳秒的交易上还是多少力不从心，当然对于分钟级策略而言还是可以接受的。</p>
-<p>作为系统衍生出来的工具包，它必然也隐含了对应的设计理念，比如它现在的策略模块的设计已经考虑了后续如何尽少改动地对接 tradingview 的缠论体系，以及对接仿真交易的 api 接口，现在推出来的行情接口有外股也有内股，便也是对应了后续仿真交易接口的种类，同时行情及指标计算始终对标现有交易平台也隐含了量化实盘所需的严谨性。</p>
-<p>对于实盘而言，教研工具包还是很多东西无法直接提供的，包括策略版本控制、用户实时交互、日志采集机制、实盘容灾方案等等。</p>
-<p>怎么说呢，这个项目花了整整一年，还是倾注了许多心血的，但和大公司病一样，PPT越来越大，面对越来越大的愿景，反而很难有完成的勇气，目前是简单推出一版作为暂以告落。</p>
+                <h2 id="trade-learn-的一些反思"><a href="#trade-learn-的一些反思" class="headerlink" title="trade-learn 的一些反思"></a>trade-learn 的一些反思</h2><p>关于上周的 trade-learn 项目，我想再补充一些内容。</p>
+<p>对于 trade-learn，我们内部其实设定的是围绕高频交易的策略实盘系统，它以工具包的形式发布，事实上也被迫砍了许多许多，不可否认地，系统往往是要比工具包更加复杂的。</p>
+<p>之所以上周称它是教研版本，是因为使用 backtrader 作为底层的回测系统，python 作为毫秒级的解释性语言在微秒纳秒的交易上还是多少力不从心，虽然对于分钟级策略依旧是可以接受的，但是这样也无法发挥统计策略的最大作用。</p>
+<p>作为系统衍生出来的工具包，它必然也隐含了对应的实盘设计理念：</p>
+<ul>
+<li>它现在的策略模块的设计已经考虑了后续如何尽少改动地对接 tradingview，也就是主观量化的缠论体系，以及如何对接各类交易所的仿真交易 api 接口；</li>
+<li>现在 trade-learn 的行情接口即有外股也有内股，也是对应了后续仿真交易接口的种类；</li>
+<li>行情及指标计算始终对标现有交易平台也隐含了量化实盘所需的严谨性。</li>
+</ul>
+<p>对于实盘而言，教研工具包还是很多东西无法直接提供的，包括不止于策略版本控制、用户实时交互、日志采集机制、实盘容灾方案等等，保证用户使用的轻便同时又要兼顾系统的整体性，这还是有些难度。</p>
+<p>怎么说呢，这个项目花了整整一年，还是倾注了许多心血的，但也和大公司病一样，项目 PPT 越来越大，面对越来越大的愿景，反而很难有完成的勇气。</p>
 <p>先让我回归生活吧，有心力的时候再继续完善，公众号也暂时停更一段时间。</p>
 
             </div>
@@ -1019,7 +1026,8 @@
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            trade-learn 的一些反思关于上周的 trade-learn 项目，我想再补充一些内容。对于 trade-learn，我们内部其实设定的是围绕高频交易的策略实盘系统，它现在以工具包的形式发布，事实上被迫砍了许多许多，系统往往是要比工
+                            trade-learn 的一些反思关于上周的 trade-learn 项目，我想再补充一些内容。
+对于 trade-learn，我们内部其实设定的是围绕高频交易的策略实盘系统，它以工具包的形式发布，事实上也被迫砍了许多许多，不可否认地，系统
                         
                     </div>
                     <div class="publish-info">
@@ -1282,7 +1290,7 @@
 
             
             &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-            <span class="white-color">137.3k</span>
+            <span class="white-color">137.4k</span>
             
 
             <br>
